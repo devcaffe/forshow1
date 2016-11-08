@@ -1,0 +1,9 @@
+---
+# defaults file for aws
+
+region: us-east-1
+instance_type: t2.micro
+count: 1
+#gather_facts: False
+ubuntu_image: ami-40d28157
+aws_keypair: wtg-key1

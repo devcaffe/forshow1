@@ -1,0 +1,11 @@
+---
+# tasks file for bootstrap
+
+- name: install python at a minimum
+  raw: "apt-get update && apt-get -y install python"
+  become: True
+
+
+- name: get ec2 facts
+  action: ec2_facts
+  register: boo

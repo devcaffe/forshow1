@@ -1,0 +1,21 @@
+---
+# tasks file for common
+
+
+
+- name: reconfig dpkg
+  command:  "dpkg --configure -a"
+  become: True
+
+
+- name: install apt packages
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=3600
+  become: True
+  with_items:
+   - git
+   - nginx
+   - python-dev
+   - python-pip
+   - python-setuptools
+   - python-virtualenv
+   - supervisor

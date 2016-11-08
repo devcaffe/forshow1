@@ -1,0 +1,84 @@
+---
+# tasks file for aws
+
+- name: ec2 keypair
+  ec2_key:
+    name: "{{ aws_keypair }}"
+    region: "{{ region }}"
+#  ec2_key: name=mykey key_material="{{ item }}" region={{ region }}
+#  with_file: ~/.ssh/id_rsa.pub
+
+
+- name: create a vpc
+  ec2_vpc:
+   region: "{{ region }}"
+   internet_gateway: True
+   resource_tags: { Name: waveapp, env: wave-prod }
+   cidr_block: 10.99.0.0/16
+   subnets:
+     - cidr: 10.99.0.0/24
+       resource_tags:
+         env: wave-prod
+         tier: web
+   route_tables:
+     - subnets:
+       - 10.99.0.0/24
+       routes:
+        - dest: 0.0.0.0/0
+          gw: igw
+  register: vpc
+
+
+- name: web security group
+  ec2_group:
+    name: "waveweb99999"
+    description: "allow http, https and ssh access"
+    region: "{{ region }}"
+    vpc_id: "{{ vpc.vpc_id }}"
+    rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443
+        to_port: 443
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+  register: wavesecgroup
+
+
+
+- name: start the instances
+  ec2:
+    region: "{{ region }}"
+    image: "{{ ubuntu_image }}"
+    instance_type: "{{ instance_type }}"
+    assign_public_ip: True
+    vpc_subnet_id: "{{ vpc.subnets[0].id}}"
+    key_name: wtg-key1
+    group_id: "{{ wavesecgroup.group_id }}"
+    instance_tags: { Name: waveapp, type: waveweb, env: wave-prod }
+    exact_count: "{{ count }}"
+    count_tag: { type: waveweb }
+    wait: yes
+  register: ec2
+
+- debug: var=ec2
+
+
+- name: Add instances to host group
+  add_host: hostname={{ item.public_ip }} group=wavewebgroup
+  with_items: "{{ ec2.instances }}"
+
+
+- name: wait for ssh service to be reachable
+  wait_for: host={{ item.public_ip }} port=22 connect_timeout=10 search_regex=OpenSSH
+  with_items: "{{ ec2.instances }}"
+
+### Debug for me
+- name: get ec2 facts
+  ec2_facts:

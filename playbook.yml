@@ -1,0 +1,20 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  roles:
+   - { role: aws, tags: [ "aws" ] }
+
+
+- hosts: wavewebgroup
+  gather_facts: False
+  roles:
+    - { role: bootstrap, tags: [ "bootstrap" ] }
+
+- hosts: wavewebgroup
+  gather_facts: True
+  roles:
+    - { role: common, tags: [ "common" ] }
+    - { role: nginx, tags: [ "nginx" ] }
+    - { role: deploy, tags: [ "deploy" ] }
+
+
