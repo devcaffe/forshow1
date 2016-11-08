@@ -8,13 +8,13 @@
   become: True
   notify: restart nginx
 
-- name: Generate certs
-  command: >
-   mkdir -p /etc/nginx/ssl  &&
-   openssl req -x509 -nodes -days 3650 -newkey rsa:2048
-   -subj /CN={{ server_name }}
-   -keyout {{ key_file }} -out {{ cert_file }}
-  become: True
+#- name: Generate certs
+#  command: >
+#   mkdir -p /etc/nginx/ssl  &&
+#   openssl req -x509 -nodes -days 3650 -newkey rsa:2048
+#   -subj /CN={{ server_name }}
+#   -keyout {{ key_file }} -out {{ cert_file }}
+#  become: True
 
 - name: enable the nginx config file
   file:
@@ -25,8 +25,6 @@
   become: True
 
 
-
-
 - name: remove the default nginx config file
   file:
     path: /etc/nginx/sites-enabled/default
@@ -35,14 +33,23 @@
   become: True
 
 - name: add supervisor group
-  command: /usr/sbin/groupadd supervisor
+  group: name=supervisor state=present
   become: True
-  run_once: True
 
-- name: add ansible_user to supervisor group
-  command: usermod -a -G supervisor {{ ansible_user_id }}
+- name: add user to supervisor group
+  user: name=ubuntu group=supervisor
   become: True
-  run_once: True
+
+
+#- name: add supervisor group
+#  command: /usr/sbin/groupadd supervisor
+#  become: True
+#  run_once: True
+
+#- name: add ansible_user to supervisor group
+#  command: usermod -a -G supervisor {{ ansible_user_id }}
+#  become: True
+#  run_once: True
 
 
 - name: copy over broken default supervisor.conf

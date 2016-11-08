@@ -5,12 +5,12 @@
    - { role: aws, tags: [ "aws" ] }
 
 
-- hosts: wavewebgroup
-  gather_facts: False
+- hosts: all
+  gather_facts: True
   roles:
     - { role: bootstrap, tags: [ "bootstrap" ] }
 
-- hosts: wavewebgroup
+- hosts: all
   gather_facts: True
   roles:
     - { role: common, tags: [ "common" ] }

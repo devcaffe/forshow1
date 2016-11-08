@@ -17,20 +17,29 @@
 
 
 - name: restart supervisor
-#  supervisorctl: name=opseng-challenge state=started
   service: name=supervisor state=started
   become: True
+  notify: restart nginx
+
+- name: restart nginx
+  service: name=nginx state=restarted
+  become: True
+
+- name: start supervisor opseng-challenge
+  supervisorctl: name=opseng-challenge state=started
+#  service: name=supervisor state=started
+#  become: True
 
 
-- name: Print New Web URL  v2
-  debug: msg="http://{{ ansible_ec2_public_ipv4 }}"
+#- name: Print New Web URL  v2
+#  debug: msg="http://{{ ansible_ec2_public_ipv4 }}"
 
 
-- name: export vars to bash
-  command: >
-   export foobar={{ ansible_ec2_public_ipv4 }}
-   echo $foobar
+#- name: export vars to bash
+#  command: >
+#   export foobar={{ ansible_ec2_public_ipv4 }}
+#   echo $foobar
 
 
-- name: OR - even better use PCI compliant version view sensitive Wave Customer Data :-)
-  debug: msg="https://{{ ansible_ec2_public_ipv4 }}"
+#- name: OR - even better use PCI compliant version view sensitive Wave Customer Data :-)
+#  debug: msg="https://{{ ansible_ec2_public_ipv4 }}"

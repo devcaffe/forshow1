@@ -1,5 +1,6 @@
 ---
 # handlers file for nginx
+
 - name: restart nginx
   service: name=nginx state=restarted
   become: True
@@ -10,8 +11,8 @@
 
 
 - name: start supervisor
-#  service: name=supervisor state=started
-  raw: service supervisor start
+  service: name=supervisor state=started
+#  raw: service supervisor start
   become: True
 
 - name: restart supervisor
