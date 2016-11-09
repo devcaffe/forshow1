@@ -5,7 +5,7 @@
   ec2_key:
    name: "wsoyinka-{{ proj_name }}-key"
    region: "{{ region }}"
-  state: absent
+   state: absent
 
 - name: Create new EC2 key
   ec2_key:
