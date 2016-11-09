@@ -1,7 +1,13 @@
 ---
 # tasks file for aws
 
-- name: Create an EC2 key
+- name: Remove exisiting EC2 key
+  ec2_key:
+   name: "wsoyinka-{{ proj_name }}-key"
+   region: "{{ region }}"
+  state: absent
+
+- name: Create new EC2 key
   ec2_key:
    name: "wsoyinka-{{ proj_name }}-key"
    region: "{{ region }}"
@@ -11,7 +17,7 @@
 
 - name: save private key file
   copy: content="{{ ec2_key.key.private_key }}" dest="./wsoyinka-{{ proj_name }}-key.pem" mode=0600
-#  when: ec2_key.changed
+  when: ec2_key.changed
 
 
 - name: create a vpc
