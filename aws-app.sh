@@ -23,7 +23,6 @@ echo "Starting AWS setup ...."
 ansible-playbook --tag aws   playbook.yml 
 
 
-
 new_instance_ip=$(aws ec2 describe-instances --filters Name=tag:Name,Values=wsoyinka-waveapp --output text --query 'Reservations[*].Instances[*].PublicIpAddress')
 
 
@@ -31,9 +30,11 @@ new_instance_ip=$(aws ec2 describe-instances --filters Name=tag:Name,Values=wsoy
 
 #ssh -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -y update && sudo dpkg --configure -a  && sudo apt-get -q -y install python2.7 && sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
 
-ssh -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -y update && sudo dpkg --configure -a  && sudo apt-get -q -y install python2.7"
+ssh -v -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -y update && sudo dpkg --configure -a"  
 
-ssh -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
+ssh -v -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -q -y install python2.7"
+
+ssh -v -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
 
 
 ansible-playbook --tag common,nginx,deploy   playbook.yml 
@@ -47,7 +48,7 @@ http://$new_instance_ip"
 
 echo ""
 
-echo " We are working on a more PCI version of the site...because we care about all wave customer data. Coming soon and can be reached here:
+echo " We are working on a more PCI DSS compliant version of the site...because we care about  wave customer data. Coming soon and can be reached here:
 
 echo ""
 
