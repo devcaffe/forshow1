@@ -30,11 +30,15 @@ new_instance_ip=$(aws ec2 describe-instances --filters Name=tag:Name,Values=wsoy
 
 #ssh -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -y update && sudo dpkg --configure -a  && sudo apt-get -q -y install python2.7 && sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
 
-ssh -v -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -y update && sudo dpkg --configure -a"  
+echo "Did I get here at all ?"
 
-ssh -v -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -q -y install python2.7"
+ssh -v -i ./wsoyinka-opseng-challenge-key.pem -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -y update && sudo dpkg --configure -a"  
 
-ssh -v -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
+echo "Or even here at all ??
+
+ssh -v -i ./wsoyinka-opseng-challenge-key.pem -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -q -y install python2.7"
+
+ssh -v -i ./wsoyinka-opseng-challenge-key.pem -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
 
 
 ansible-playbook --tag common,nginx,deploy   playbook.yml 
