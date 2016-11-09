@@ -26,8 +26,12 @@
   become: True
 
 - name: start supervisor opseng-challenge
-  supervisorctl: name=opseng-challenge state=started
+  command: service supervisor restart
   become: True
+
+#- name: start supervisor opseng-challenge
+#  supervisorctl: name=opseng-challenge state=started
+#  become: True
 
 #  service: name=supervisor state=started
 #  become: True
