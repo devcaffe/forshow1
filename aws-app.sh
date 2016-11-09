@@ -5,7 +5,6 @@
 
 set -o errexit
 set -o pipefail
-set -o nounset
 
 
 virtualenv  -p python2.7 waveansible
