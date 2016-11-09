@@ -34,7 +34,7 @@ echo "Did I get here at all ?"
 
 ssh -v -i ./wsoyinka-opseng-challenge-key.pem -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -y update && sudo dpkg --configure -a"  
 
-echo "Or even here at all ??
+echo "Or even here at all ?? "
 
 ssh -v -i ./wsoyinka-opseng-challenge-key.pem -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -q -y install python2.7"
 
@@ -46,6 +46,7 @@ ansible-playbook --tag common,nginx,deploy   playbook.yml
 ansible-vault encrypt  env/secrets.yml --vault-password-file env/pass.txt
 
 echo  "The website can be reached at:"
+
 echo ""
 
 echo  "http://$new_instance_ip " 
@@ -61,4 +62,3 @@ echo  "https://$new_instance_ip"
 echo ""
 echo ""
 echo ""
-
