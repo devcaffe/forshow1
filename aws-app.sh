@@ -45,10 +45,10 @@ ansible-playbook --tag common,nginx,deploy   playbook.yml
 
 ansible-vault encrypt  env/secrets.yml --vault-password-file env/pass.txt
 
-echo  "The website can be reached at:
+echo  "The website can be reached at:"
 echo ""
 
-http://$new_instance_ip"  
+http://$new_instance_ip  
 
 echo ""
 
