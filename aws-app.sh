@@ -1,6 +1,7 @@
 #!/bin/bash
 
-virtualenv  -p python2.7 --system-site-packages waveansible
+virtualenv  -p python2.7 waveansible
+#virtualenv  -p python2.7 --system-site-packages waveansible
 
 
 source waveansible/bin/activate
