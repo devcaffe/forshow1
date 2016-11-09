@@ -2,21 +2,36 @@
 
 virtualenv  -p python2.7 --system-site-packages waveansible
 
-#virtualenv  waveansible
 
 source waveansible/bin/activate
 
-pip install ansible
-pip install boto
+pip -q install ansible
+pip -q install boto
 
-#AWS_PROFILE=wtg ansible-playbook --tag aws   playbook.yml --ask-vault-pass
-AWS_PROFILE=wtg ansible-playbook --tag aws   playbook.yml 
+ansible-vault decrypt  env/secrets.yml --vault-password-file env/pass.txt
 
-new_instance_id=$(aws ec2 describe-instances --filters Name=tag:Name,Values=waveapp --profile wtg --output text --query 'Reservations[*].Instances[*].PublicIpAddress')
+source env/secrets.yml
 
-echo $new_instance_id
+echo "Starting AWS setup ...."
 
-ssh -i "~/.ssh/wtg-key1.pem"   ubuntu@$new_instance_id  "sudo apt-get -y update && sudo apt-get -y install python2.7" 
+ansible-playbook --tag aws   playbook.yml 
 
-#AWS_PROFILE=wtg ansible-playbook --tag common,nginx,deploy   playbook.yml --ask-vault-pass
-AWS_PROFILE=wtg ansible-playbook --tag common,nginx,deploy -i $new_instance_id,  playbook.yml 
+
+
+new_instance_ip=$(aws ec2 describe-instances --filters Name=tag:Name,Values=wsoyinka-waveapp --output text --query 'Reservations[*].Instances[*].PublicIpAddress')
+
+
+## Forcefully bootstrap 16.04 LTS ami
+ssh -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -q -y update && sudo apt-get -q -y install python2.7 && sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
+
+
+ansible-playbook --tag common,nginx,deploy   playbook.yml 
+
+ansible-vault encrypt  env/secrets.yml --vault-password-file env/pass.txt
+
+echo  "The website can be reached at:  http://$new_instance_ip"  
+echo ""
+
+echo " You can alternative view the more secure version here:" 
+echo ""
+echo  "http://$new_instance_ip"

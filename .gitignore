@@ -1,2 +1,4 @@
 *.pyc
 waveansible*
+playbook.retry*
+inventory/hosts*

@@ -40,22 +40,15 @@
   user: name=ubuntu group=supervisor
   become: True
 
-
-#- name: add supervisor group
-#  command: /usr/sbin/groupadd supervisor
-#  become: True
-#  run_once: True
-
-#- name: add ansible_user to supervisor group
-#  command: usermod -a -G supervisor {{ ansible_user_id }}
-#  become: True
-#  run_once: True
-
-
 - name: copy over broken default supervisor.conf
   template: src=main-supervisor.conf.j2 dest=/etc/supervisor/supervisord.conf
   become: True
   notify: start supervisor
+
+- name: start supervisor
+  service: name=supervisor state=started
+#  raw: service supervisor start
+  become: True
 
 - name: set the supervisor config files
   template: src=waveapp-supervisor.conf.j2 dest=/etc/supervisor/conf.d/waveapp.conf
