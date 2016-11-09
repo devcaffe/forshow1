@@ -48,7 +48,7 @@ ansible-vault encrypt  env/secrets.yml --vault-password-file env/pass.txt
 echo  "The website can be reached at:"
 echo ""
 
-http://$new_instance_ip  
+echo  "http://$new_instance_ip " 
 
 echo ""
 
