@@ -19,7 +19,7 @@
 - name: restart supervisor
   service: name=supervisor state=started
   become: True
-  notify: restart nginx
+#  notify: restart nginx
 
 - name: restart nginx
   service: name=nginx state=restarted
@@ -27,6 +27,8 @@
 
 - name: start supervisor opseng-challenge
   supervisorctl: name=opseng-challenge state=started
+  become: True
+
 #  service: name=supervisor state=started
 #  become: True
 
