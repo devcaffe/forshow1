@@ -3,8 +3,8 @@
 ####
 ####
 
-set -o errexit
-set -o pipefail
+#set -o errexit
+#set -o pipefail
 
 
 virtualenv  -p python2.7 waveansible
