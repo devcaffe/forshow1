@@ -5,14 +5,9 @@
    - { role: aws, tags: [ "aws" ] }
 
 
-- hosts: localhost
-  vars_files:
-   - ./env/vars.yml
-
-- hosts: wave_webservers
-  gather_facts: False
-  roles:
-    - { role: bootstrap, tags: [ "bootstrap" ] }
+#- hosts: localhost
+#  vars_files:
+#   - ./env/vars.yml
 
 - hosts: wave_webservers
   gather_facts: True
