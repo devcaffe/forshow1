@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
 
 virtualenv  -p python2.7 waveansible
-#virtualenv  -p python2.7 --system-site-packages waveansible
-
 
 source waveansible/bin/activate
 
@@ -23,16 +21,27 @@ new_instance_ip=$(aws ec2 describe-instances --filters Name=tag:Name,Values=wsoy
 
 
 ## Forcefully bootstrap 16.04 LTS ami
-ssh -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -q -y update && sudo apt-get -q -y install python2.7 && sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
+ssh -i "./wsoyinka-opseng-challenge-key.pem" -o StrictHostKeyChecking=no  ubuntu@$new_instance_ip  "sudo apt-get -qq -y update && sudo apt-get -qq -y install python2.7 && sudo ln  -s /usr/bin/python2.7 /usr/bin/python" 
 
 
 ansible-playbook --tag common,nginx,deploy   playbook.yml 
 
 ansible-vault encrypt  env/secrets.yml --vault-password-file env/pass.txt
 
-echo  "The website can be reached at:  http://$new_instance_ip"  
+echo  "The website can be reached at:
 echo ""
 
-echo " You can alternative view the more secure version here:" 
+http://$new_instance_ip"  
+
 echo ""
-echo  "http://$new_instance_ip"
+
+echo " We are working on a more PCI version of the site...because we care about all wave customer data. Coming soon and can be reached here:
+
+echo ""
+
+echo  "https://$new_instance_ip"
+
+echo ""
+echo ""
+echo ""
+
